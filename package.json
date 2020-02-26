@@ -1,12 +1,28 @@
 {
   "name": "airbnbclone-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API File for our clonebnb",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morpheus86/clonebnb-api.git"
+  },
+  "bugs": {
+    "url": "https://github.com/morpheus86/clonebnb-api/issues"
+  },
+  "homepage": "https://github.com/morpheus86/clonebnb-api#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.9.1",
+    "path": "^0.12.7"
+  }
 }
