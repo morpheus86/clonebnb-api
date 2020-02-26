@@ -1,0 +1,6 @@
+{
+  "database": "bnb-clone",
+  "host": "localhost",
+  "dialect": "postgres",
+  "logging": false
+}
