@@ -22,13 +22,8 @@ const User = db.define(
   },
   {
     hooks: {
-      beforeValidate: user => {
+      beforeValidate: async user => {
         user.name = user.name[0].toUpperCase() + user.name.slice(1);
-      },
-      beforeCreate: async user => {
-        const saltRounds = 10;
-        const salt = await bcrypt.genSalt(saltRounds);
-        user.password = await bcrypt.hash(user.password, salt);
       }
     }
   }

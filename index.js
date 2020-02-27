@@ -33,8 +33,8 @@ app.use((err, req, res, next) => {
     })
     .join("\n");
   // colorize and format the output
-  console.log(chalk.magenta("      " + err.message));
-  console.log("    " + chalk.gray(cleanTrace));
+  // console.log(chalk.magenta("      " + err.message));
+  // console.log("    " + chalk.gray(cleanTrace));
   // send back error status
   res.status(err.status || 500).end();
 });
@@ -46,4 +46,5 @@ UserLogin.sync({ alter: true });
 app.listen(PORT, () => {
   console.log(`application is running on port ${PORT}`);
 });
+
 module.exports = app;
