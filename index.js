@@ -12,10 +12,21 @@ const UserLogin = require("./models/login.model");
 const PORT = 4000;
 const app = express();
 
+const whiteList = ["http://localhost:4000"];
+// const corsOption = {
+//   origin: () => {
+//     if (whiteList.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("not allowed"));
+//     }
+//   }
+// };
+
 app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(cors());
 app.use("/api", routes);
 
 // custom error handling
