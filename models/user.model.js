@@ -1,6 +1,5 @@
 const Sequelize = require("sequelize");
 const db = require("./database");
-const bcrypt = require("bcryptjs");
 
 const User = db.define(
   "user",
@@ -10,14 +9,12 @@ const User = db.define(
       allowNull: false
     },
     lastName: {
-      type: Sequelize.STRING
-      // allowNull: false
+      type: Sequelize.STRING,
+      allowNull: false
     },
     email: {
       type: Sequelize.STRING,
-      validate: {
-        isEmail: true
-      }
+      allowNull: false
     }
   },
   {
@@ -29,8 +26,8 @@ const User = db.define(
   }
 );
 
-User.prototype.isPasswordValid = async password => {
-  return await bcrypt.compare(password, this.password);
-};
+// User.prototype.isPasswordValid = async password => {
+//   return await bcrypt.compare(password, this.password);
+// };
 
 module.exports = User;
