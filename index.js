@@ -6,9 +6,11 @@ const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const routes = require("./controllers/routes");
 const User = require("./models/user.model");
-const House = require("./models/house.model");
+
 const Review = require("./models/reviews.model");
 const UserLogin = require("./models/login.model");
+
+const House = require("./models/house.model");
 const PORT = 4000;
 const app = express();
 
