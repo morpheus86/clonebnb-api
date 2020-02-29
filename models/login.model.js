@@ -2,15 +2,16 @@
 const Sequelize = require("sequelize");
 const db = require("./database");
 const bcrypt = require("bcryptjs");
+
 const UserLogin = db.define(
   "login",
   {
     email: {
-      type: Sequelize.TEXT,
+      type: Sequelize.STRING,
       allowNull: false
     },
     password: {
-      type: Sequelize.TEXT,
+      type: Sequelize.STRING,
       allowNull: false
     }
   },
@@ -25,4 +26,7 @@ const UserLogin = db.define(
   }
 );
 
+UserLogin.prototype.isPasswordValid = async password => {
+  return await bcrypt.compare(password, this.password);
+};
 module.exports = UserLogin;

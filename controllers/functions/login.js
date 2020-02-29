@@ -1,20 +1,22 @@
 "strict mode";
+// const UserLogin = require("../../models/login.model")
 
-const handleSignin = async (db, user, bcrypt, req, res) => {
+const handleSignin = async (db, user, req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return Promise.reject("Incorrect form submission");
   }
   //select email and password from login
-  const userLog = await db.findAll({
+  const userLog = await db.findOne({
     where: {
       email
     }
   });
 
-  //make sure the data receive match the bcrypt password
-  const isValid = await bcrypt.compareSync(password, userLog[0].password);
-  if (isValid) {
+  const isPasswordValid = userLog.isPasswordValid(password);
+
+  console.log("isValid", isPasswordValid);
+  if (isPasswordValid) {
     //grab the user Info and return it
     const userInfo = await user.findOne({
       where: {
