@@ -3,17 +3,17 @@
 const { User, UserLogin, db } = require("../models");
 
 const usersLogin = [
-  {
-    email: "a@a.com",
-    password: "a"
-  }
+  // {
+  //   email: "a@a.com",
+  //   password: "a"
+  // }
 ];
 const users = [
-  {
-    name: "a",
-    lastName: "b",
-    email: "a@a.com"
-  }
+  // {
+  //   name: "a",
+  //   lastName: "b",
+  //   email: "a@a.com"
+  // }
 ];
 
 const seed = async () => {
