@@ -3,9 +3,9 @@ const Sequelize = require("sequelize");
 const db = require("./database");
 
 const Review = db.define("review", {
-  houseId: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-  userId: { type: Sequelize.DataTypes.INTEGER, allowNull: false },
-  comment: { type: Sequelize.DataTypes.TEXT, allowNull: false }
+  user: { type: Sequelize.STRING },
+  avatar: { type: Sequelize.STRING },
+  comment: { type: Sequelize.TEXT, allowNull: false }
 });
 
 module.exports = Review;
