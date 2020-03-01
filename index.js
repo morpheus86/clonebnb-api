@@ -5,12 +5,13 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const routes = require("./controllers/routes");
-const User = require("./models/user.model");
 
+const Booking = require("./models/bookings.model");
+const User = require("./models/user.model");
 const Review = require("./models/reviews.model");
 const UserLogin = require("./models/login.model");
-
 const House = require("./models/house.model");
+
 const PORT = 4000;
 const app = express();
 
@@ -56,6 +57,7 @@ User.sync({ alter: true });
 House.sync({ alter: true });
 Review.sync({ alter: true });
 UserLogin.sync({ alter: true });
+Booking.sync({ alter: true });
 app.listen(PORT, () => {
   console.log(`application is running on port ${PORT}`);
 });
