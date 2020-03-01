@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const House = require("../../models/house.model");
 const Review = require("../../models/reviews.model");
+const Booking = require("../../models/bookings.model");
+
 router.get("/", async (req, res, next) => {
   try {
     const houses = await House.findAll();
@@ -43,6 +45,20 @@ router.get("/:id", (req, res, next) => {
     });
   } catch (error) {
     next(error);
+  }
+});
+
+router.post("/booking", async (req, res) => {
+  try {
+    // const { houseId, startDate, endDate } = req.body
+    // User.findOne({
+    //   where: {
+    //     email
+    //   }
+    // })
+    console.log("req", req.session);
+  } catch (error) {
+    console.error(error);
   }
 });
 module.exports = router;
