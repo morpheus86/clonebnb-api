@@ -7,6 +7,7 @@ const handleProfile = async (db, req, res) => {
         id
       }
     });
+
     res.json(profile[0]);
   } catch (error) {
     next(error);
