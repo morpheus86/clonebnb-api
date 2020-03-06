@@ -18,6 +18,10 @@ const Booking = db.define("booking", {
   endDate: {
     type: Sequelize.DATEONLY,
     allowNull: false
+  },
+  reserved: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
 });
 

@@ -26,7 +26,4 @@ const UserLogin = db.define(
   }
 );
 
-// UserLogin.prototype.isPasswordValid = async password => {
-//   return await bcrypt.compare(password, this.password);
-// };
 module.exports = UserLogin;

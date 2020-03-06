@@ -73,15 +73,12 @@ const getAuthTokenId = (req, res) => {
 };
 
 const signinAuthentication = async (db, user, req, res) => {
-
   const { authorization } = req.headers;
   if (authorization) {
     return getAuthTokenId(req, res);
   } else {
     const userInfo = await handleSignin(db, user, req);
     const session = await createSession(userInfo, res);
-    // return session;
-    // console.log("session", session);
     res.json(session);
   }
 };

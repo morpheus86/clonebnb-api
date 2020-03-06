@@ -144,7 +144,7 @@ router.post("/reserve", async (req, res, next) => {
   try {
     const { houseId, startDate, endDate, user } = req.body;
     const canBookThoseDates = await checkIfBooked(houseId, startDate, endDate);
-    console.log("check if booked", canBookThoseDates);
+
     if (!canBookThoseDates) {
       res.writeHead(500, {
         "content-type": "application.json"
@@ -166,7 +166,8 @@ router.post("/reserve", async (req, res, next) => {
       houseId,
       userId: userInfo.dataValues.id,
       startDate,
-      endDate
+      endDate,
+      reserved
     });
     res.sendStatus(200).end(
       JSON.stringify({
@@ -176,6 +177,30 @@ router.post("/reserve", async (req, res, next) => {
     );
   } catch (error) {
     next(error);
+  }
+});
+
+router.get("/bookings/list/:userId", async (req, res, next) => {
+  try {
+    const id = req.params.userId;
+    const booking = await Booking.findAll({
+      where: {
+        userId: id
+      }
+    });
+    const houseBooked = await Promise.all(
+      booking.map(async booked => {
+        const data = {};
+        data.booking = booked.dataValues;
+        const houses = await House.findByPk(data.booking.houseId);
+        data.house = houses.dataValues;
+
+        return data;
+      })
+    );
+    res.end(JSON.stringify(houseBooked));
+  } catch (err) {
+    console.log(err);
   }
 });
 module.exports = router;
