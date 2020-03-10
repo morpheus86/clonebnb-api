@@ -82,7 +82,25 @@ const signinAuthentication = async (db, user, req, res) => {
     res.json(session);
   }
 };
+
+const requireAuth = (req, res, next) => {
+  try {
+    console.log("req.headers.authorization", req.headers.authorization);
+    const { authorization } = req.headers;
+    if (!authorization) {
+      return res.status(401).json("unauthorized");
+    }
+    return redisClient.get(authorization, (err, reply) => {
+      if (err || !reply) {
+        return res.status(401).json("unauthorized");
+      }
+      return next();
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
 module.exports = {
   signinAuthentication,
-  redisClient
+  requireAuth
 };
