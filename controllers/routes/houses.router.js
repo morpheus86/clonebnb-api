@@ -66,31 +66,6 @@ router.get("/:id", (req, res, next) => {
   }
 });
 
-// router.post("/booking", async (req, res) => {
-//   try {
-//     const { houseId, startDate, endDate, userEmail } = req.body;
-//     const user = await User.findOne({
-//       where: {
-//         email: userEmail
-//       }
-//     });
-//     const booking = await Booking.create({
-//       houseId,
-//       userId: user.dataValues.id,
-//       startDate,
-//       endDate
-//     });
-//     res.end(
-//       JSON.stringify({
-//         status: "success",
-//         message: "ok"
-//       })
-//     );
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
-
 router.post("/booked", async (req, res, next) => {
   try {
     const houseId = req.body.houseId;
@@ -102,7 +77,7 @@ router.post("/booked", async (req, res, next) => {
         }
       }
     });
-    console.log("result", result);
+
     let bookedDate = [];
     for (const res of result) {
       const dates = getDatesInBetween(
@@ -208,4 +183,55 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
   }
 });
 
+router.get("/host/list/:userId", requireAuth, async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findOne({
+      where: {
+        id: userId
+      }
+    });
+    const houses = await House.findAll({
+      where: {
+        id: user.dataValues.id
+      }
+    });
+
+    const houseId = houses.map(house => house.dataValues.id);
+
+    const bookingData = await Booking.findAll({
+      where: {
+        houseId: {
+          [Op.in]: houseId
+        },
+        endDate: {
+          [Op.gte]: new Date()
+        }
+      },
+      order: [["startDate", "ASC"]]
+    });
+
+    const book = await Promise.all(
+      bookingData.map(async b => {
+        return {
+          booking: b.dataValues,
+          house: houses.filter(
+            house => house.dataValues.id === b.dataValues.houseId
+          )[0].dataValues
+        };
+      })
+    );
+    res.writeHead(200, {
+      "Content-Type": "application/json"
+    });
+    res.end(
+      JSON.stringify({
+        book,
+        houses
+      })
+    );
+  } catch (error) {
+    console.log(error);
+  }
+});
 module.exports = router;

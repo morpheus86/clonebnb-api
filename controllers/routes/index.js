@@ -7,6 +7,6 @@ router.use("/user", require("./user.router"));
 
 router.use((req, res, next) => {
   const err = new Error("NOT FOUND");
-
+  error.status(404);
   next(err);
 });
