@@ -85,7 +85,6 @@ const signinAuthentication = async (db, user, req, res) => {
 
 const requireAuth = (req, res, next) => {
   try {
-    console.log("req.headers.authorization", req.headers.authorization);
     const { authorization } = req.headers;
     if (!authorization) {
       return res.status(401).json("unauthorized");
