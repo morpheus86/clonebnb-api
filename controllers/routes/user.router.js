@@ -4,13 +4,23 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../../models/user.model");
 const UserLogin = require("../../models/login.model");
+const { requireAuth } = require("../functions/login");
 const { handleProfile } = require("../functions/handleProfile");
 
-router.get("/:id", (req, res, next) => {
+router.get("/:id", requireAuth, (req, res, next) => {
   try {
     handleProfile(User, req, res);
   } catch (error) {
     next(error);
+  }
+});
+
+router.post("/logout", (req, res, next) => {
+  try {
+    // console.log("req.logout(", req.logout());
+    console.log("req.logout(", req.session);
+  } catch (error) {
+    console.log(error);
   }
 });
 

@@ -4,6 +4,7 @@ const Review = require("../../models/reviews.model");
 const User = require("../../models/user.model");
 const Booking = require("../../models/bookings.model");
 const { getDatesInBetween } = require("../functions/booking");
+const { requireAuth } = require("../functions/login");
 const Op = require("sequelize").Op;
 
 const checkIfBooked = async (id, start, end) => {
@@ -25,7 +26,7 @@ router.get("/", async (req, res, next) => {
     const houses = await House.findAll();
     res.send(houses);
   } catch (error) {
-    next(err);
+    next(error);
   }
 });
 
@@ -101,7 +102,7 @@ router.post("/booked", async (req, res, next) => {
         }
       }
     });
-
+    console.log("result", result);
     let bookedDate = [];
     for (const res of result) {
       const dates = getDatesInBetween(
@@ -118,13 +119,16 @@ router.post("/booked", async (req, res, next) => {
       dates: bookedDate
     });
   } catch (error) {
-    next(error);
+    console.log(
+      JSON.stringify({
+        error
+      })
+    );
   }
 });
 
-router.post("/check", async (req, res) => {
+router.post("/check", requireAuth, async (req, res) => {
   try {
-    console.log("req.body check", req.body);
     const { startDate, endDate, houseId } = req.body;
     let message = "free";
     const canBook = await checkIfBooked(houseId, startDate, endDate);
@@ -140,9 +144,9 @@ router.post("/check", async (req, res) => {
   }
 });
 
-router.post("/reserve", async (req, res, next) => {
+router.post("/reserve", requireAuth, async (req, res, next) => {
   try {
-    const { houseId, startDate, endDate, user } = req.body;
+    const { houseId, startDate, endDate, user, reserved } = req.body;
     const canBookThoseDates = await checkIfBooked(houseId, startDate, endDate);
 
     if (!canBookThoseDates) {
@@ -180,7 +184,7 @@ router.post("/reserve", async (req, res, next) => {
   }
 });
 
-router.get("/bookings/list/:userId", async (req, res, next) => {
+router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
   try {
     const id = req.params.userId;
     const booking = await Booking.findAll({
@@ -203,4 +207,5 @@ router.get("/bookings/list/:userId", async (req, res, next) => {
     console.log(err);
   }
 });
+
 module.exports = router;
