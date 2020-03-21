@@ -23,10 +23,9 @@ const checkIfBooked = async (id, start, end) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    const houseFound = await House.findAndCountAll()
+    const houseFound = await House.findAndCountAll();
 
-
-    const result = houseFound.rows.map(h => h.dataValues )
+    const result = houseFound.rows.map(h => h.dataValues);
 
     res.send(result);
   } catch (error) {
@@ -106,7 +105,7 @@ router.post("/booked", async (req, res, next) => {
   }
 });
 
-router.post("/check",requireAuth, async (req, res) => {
+router.post("/check", requireAuth, async (req, res) => {
   try {
     const { startDate, endDate, houseId } = req.body;
 
@@ -124,7 +123,7 @@ router.post("/check",requireAuth, async (req, res) => {
   }
 });
 
-router.post("/reserve",requireAuth, async (req, res, next) => {
+router.post("/reserve", requireAuth, async (req, res, next) => {
   try {
     const { houseId, startDate, endDate, user, reserved } = req.body;
     const canBookThoseDates = await checkIfBooked(houseId, startDate, endDate);
@@ -166,18 +165,18 @@ router.post("/reserve",requireAuth, async (req, res, next) => {
 
 router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
   try {
-    const {userId} = req.params
+    const { userId } = req.params;
     const user = await User.findOne({
       where: {
         id: userId
       }
-    })
+    });
     const houses = await House.findAll({
       where: {
         host: user.id
       }
-    })
-    const houseIds = houses.map(house => house.dataValues.id)
+    });
+    const houseIds = houses.map(house => house.dataValues.id);
     const bookingData = await Booking.findAll({
       where: {
         reserved: true,
@@ -188,18 +187,26 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
           [Op.gte]: new Date()
         }
       },
-      order: [['startDate', 'ASC']]
-    })
-    const bookings = await Promise.all(bookingData.map(async book => {
-      return {
-        booking: book.dataValues,
-        house: houses.filter(house => house.dataValues.id === book.dataValues.houseId)[0].dataValues
-      }
-    }))
-    res.send(JSON.stringify({
-      bookings,
-      houses
-    })).sendStatus(200)
+      order: [["startDate", "ASC"]]
+    });
+    const bookings = await Promise.all(
+      bookingData.map(async book => {
+        return {
+          booking: book.dataValues,
+          house: houses.filter(
+            house => house.dataValues.id === book.dataValues.houseId
+          )[0].dataValues
+        };
+      })
+    );
+    res
+      .send(
+        JSON.stringify({
+          bookings,
+          houses
+        })
+      )
+      .sendStatus(200);
   } catch (err) {
     console.log(err);
   }
@@ -207,18 +214,18 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
 
 router.get("/host/list/:userId", requireAuth, async (req, res, next) => {
   try {
-    const {userId} = req.params
+    const { userId } = req.params;
     const user = await User.findOne({
       where: {
         id: userId
       }
-    })
+    });
     const houses = await House.findAll({
       where: {
         host: user.id
       }
-    })
-    const houseIds = houses.map(house => house.dataValues.id)
+    });
+    const houseIds = houses.map(house => house.dataValues.id);
     const bookingData = await Booking.findAll({
       where: {
         reserved: true,
@@ -229,18 +236,26 @@ router.get("/host/list/:userId", requireAuth, async (req, res, next) => {
           [Op.gte]: new Date()
         }
       },
-      order: [['startDate', 'ASC']]
-    })
-    const bookings = await Promise.all(bookingData.map(async book => {
-      return {
-        booking: book.dataValues,
-        house: houses.filter(house => house.dataValues.id === book.dataValues.houseId)[0].dataValues
-      }
-    }))
-    res.send(JSON.stringify({
-      bookings,
-      houses
-    })).sendStatus(200)
+      order: [["startDate", "ASC"]]
+    });
+    const bookings = await Promise.all(
+      bookingData.map(async book => {
+        return {
+          booking: book.dataValues,
+          house: houses.filter(
+            house => house.dataValues.id === book.dataValues.houseId
+          )[0].dataValues
+        };
+      })
+    );
+    res
+      .send(
+        JSON.stringify({
+          bookings,
+          houses
+        })
+      )
+      .sendStatus(200);
   } catch (error) {
     console.log(error);
   }
@@ -248,15 +263,14 @@ router.get("/host/list/:userId", requireAuth, async (req, res, next) => {
 
 router.post("/new", requireAuth, async (req, res) => {
   try {
-    // const user = req.headers.user;
     const houseData = req.body;
-
-    // const userInfo = await User.findOne({
-    //   where: {
-    //     email: user
-    //   }
-    // });
-
+    const user = req.headers.user;
+    const userInfo = await User.findOne({
+      where: {
+        email: user
+      }
+    });
+    houseData.host = userInfo.id;
     const newHouse = await House.create(houseData);
     res.writeHead(200, {
       "Content-Type": "application/json"
@@ -276,10 +290,10 @@ router.post("/host/edit", requireAuth, async (req, res, next) => {
         email: user
       }
     });
+
     const house = await House.findByPk(houseData.id);
-    console.log("host.name", host.name);
-    console.log("house.dataValues.hostName", house.dataValues.hostName);
-    if (host.name !== house.dataValues.hostName) {
+
+    if (host.id !== house.dataValues.host) {
       res.writeHead(403, {
         "Content-Type": "application/json"
       });
