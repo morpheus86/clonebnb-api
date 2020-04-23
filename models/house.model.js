@@ -4,7 +4,7 @@ const db = require("./database");
 
 const House = db.define("house", {
   host: { type: Sequelize.INTEGER, allowNull: false },
-  picture: { type: Sequelize.STRING, allowNull: false },
+  picture: { type: Sequelize.TEXT, allowNull: false },
   type: { type: Sequelize.STRING, allowNull: false },
   town: { type: Sequelize.STRING, allowNull: false },
   title: { type: Sequelize.STRING, allowNull: false },
