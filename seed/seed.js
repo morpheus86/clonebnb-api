@@ -9,17 +9,18 @@ const usersLogin = [
   }
 ];
 const users = [
-  // {
-  //   name: "Anna",
-  //   lastName: "Boulogne",
-  //   email: "a@a.com"
-  // }
+  {
+    name: "Anna",
+    lastName: "Boulogne",
+    email: "a@a.com"
+  }
 ];
 
 const houses = [
   {
     host: 1,
-    picture: "/img/houses/1.jpg",
+    picture:
+      "https://content.api.news/v3/images/bin/9bd6b502fd2fa9b16dc10d09cc0feda6",
     type: "Entire house",
     town: "Ostuni",
     superhost: true,
@@ -40,7 +41,8 @@ const houses = [
   },
   {
     host: 2,
-    picture: "/img/houses/2.jpg",
+    picture:
+      "https://static.dezeen.com/uploads/2017/08/clifton-house-project-architecture_dezeen_hero-1.jpg",
     type: "Entire house",
     town: "Isla Mujeres",
     title: "The World Famous Seashell House ~ Casa Caracol",
@@ -60,7 +62,8 @@ const houses = [
   },
   {
     host: 1,
-    picture: "/img/houses/1.jpg",
+    picture:
+      "https://assets.themortgagereports.com/wp-content/uploads/2017/12/How-to-Buy-a-House-with-Low-Income-This-Year.jpg",
     type: "Entire house",
     town: "Mujeres",
     title: "The World Famous House ~ Caracol",
@@ -77,7 +80,6 @@ const houses = [
     heating: true,
     freeParking: true,
     entirePlace: true
-
   }
 ];
 const reviews = [

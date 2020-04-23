@@ -6,17 +6,40 @@ const Booking = require("../../models/bookings.model");
 const { getDatesInBetween } = require("../functions/booking");
 const { requireAuth } = require("../functions/login");
 const Op = require("sequelize").Op;
+const sanitizeHtml = require("sanitize-html");
+const randomstring = require("randomstring");
+var multer = require("multer");
+var storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public/images");
+  },
+  filename: (req, file, cb) => {
+    console.log(file);
+    var filetype = "";
+    if (file.mimetype === "image/gif") {
+      filetype = "gif";
+    }
+    if (file.mimetype === "image/png") {
+      filetype = "png";
+    }
+    if (file.mimetype === "image/jpeg") {
+      filetype = "jpg";
+    }
+    cb(null, "image-" + Date.now() + "." + filetype);
+  },
+});
+var upload = multer({ storage: storage });
 
 const checkIfBooked = async (id, start, end) => {
   const res = await Booking.findAll({
     where: {
       startDate: {
-        [Op.lte]: new Date(end)
+        [Op.lte]: new Date(end),
       },
       endDate: {
-        [Op.gte]: new Date(start)
-      }
-    }
+        [Op.gte]: new Date(start),
+      },
+    },
   });
   return !(res.length > 0);
 };
@@ -25,7 +48,7 @@ router.get("/", async (req, res, next) => {
   try {
     const houseFound = await House.findAndCountAll();
 
-    const result = houseFound.rows.map(h => h.dataValues);
+    const result = houseFound.rows.map((h) => h.dataValues);
 
     res.send(result);
   } catch (error) {
@@ -37,29 +60,29 @@ router.get("/:id", (req, res, next) => {
   try {
     const { id } = req.params;
 
-    House.findByPk(id).then(house => {
+    House.findByPk(id).then((house) => {
       if (house) {
         Review.findAndCountAll({
           where: {
-            id
-          }
-        }).then(reviews => {
+            id,
+          },
+        }).then((reviews) => {
           house.dataValues.reviews = reviews.rows.map(
-            review => review.dataValues
+            (review) => review.dataValues
           );
           house.dataValues.reviewsCount = reviews.count;
           res.writeHead(200, {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
           });
           res.end(JSON.stringify(house.dataValues));
         });
       } else {
         res.writeHead(404, {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         });
         res.end(
           JSON.stringify({
-            message: `Not found`
+            message: `Not found`,
           })
         );
       }
@@ -76,9 +99,9 @@ router.post("/booked", async (req, res, next) => {
       where: {
         houseId,
         endDate: {
-          [Op.gte]: new Date()
-        }
-      }
+          [Op.gte]: new Date(),
+        },
+      },
     });
 
     let bookedDate = [];
@@ -89,17 +112,17 @@ router.post("/booked", async (req, res, next) => {
       );
       bookedDate = [...bookedDate, ...dates];
     }
-    bookedDate = [...new Set(bookedDate.map(date => date))];
+    bookedDate = [...new Set(bookedDate.map((date) => date))];
 
     res.json({
       status: "success",
       message: "ok",
-      dates: bookedDate
+      dates: bookedDate,
     });
   } catch (error) {
     console.log(
       JSON.stringify({
-        error
+        error,
       })
     );
   }
@@ -116,7 +139,7 @@ router.post("/check", requireAuth, async (req, res) => {
     }
     res.json({
       status: "success",
-      message
+      message,
     });
   } catch (err) {
     console.log(err);
@@ -130,32 +153,32 @@ router.post("/reserve", requireAuth, async (req, res, next) => {
 
     if (!canBookThoseDates) {
       res.writeHead(500, {
-        "content-type": "application.json"
+        "content-type": "application.json",
       });
       res.end(
         JSON.stringify({
           status: "error",
-          message: "House is already booked"
+          message: "House is already booked",
         })
       );
       return;
     }
     const userInfo = await User.findOne({
       where: {
-        email: user
-      }
+        email: user,
+      },
     });
     const date = await Booking.create({
       houseId,
       userId: userInfo.dataValues.id,
       startDate,
       endDate,
-      reserved
+      reserved,
     });
     res.sendStatus(200).end(
       JSON.stringify({
         status: "success",
-        message: "ok"
+        message: "ok",
       })
     );
   } catch (error) {
@@ -168,34 +191,34 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
     const { userId } = req.params;
     const user = await User.findOne({
       where: {
-        id: userId
-      }
+        id: userId,
+      },
     });
     const houses = await House.findAll({
       where: {
-        host: user.id
-      }
+        host: user.id,
+      },
     });
-    const houseIds = houses.map(house => house.dataValues.id);
+    const houseIds = houses.map((house) => house.dataValues.id);
     const bookingData = await Booking.findAll({
       where: {
         reserved: true,
         houseId: {
-          [Op.in]: houseIds
+          [Op.in]: houseIds,
         },
         endDate: {
-          [Op.gte]: new Date()
-        }
+          [Op.gte]: new Date(),
+        },
       },
-      order: [["startDate", "ASC"]]
+      order: [["startDate", "ASC"]],
     });
     const bookings = await Promise.all(
-      bookingData.map(async book => {
+      bookingData.map(async (book) => {
         return {
           booking: book.dataValues,
           house: houses.filter(
-            house => house.dataValues.id === book.dataValues.houseId
-          )[0].dataValues
+            (house) => house.dataValues.id === book.dataValues.houseId
+          )[0].dataValues,
         };
       })
     );
@@ -203,7 +226,7 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
       .send(
         JSON.stringify({
           bookings,
-          houses
+          houses,
         })
       )
       .sendStatus(200);
@@ -217,63 +240,64 @@ router.get("/host/list/:userId", requireAuth, async (req, res, next) => {
     const { userId } = req.params;
     const user = await User.findOne({
       where: {
-        id: userId
-      }
+        id: userId,
+      },
     });
     const houses = await House.findAll({
       where: {
-        host: user.id
-      }
+        host: user.id,
+      },
     });
-    const houseIds = houses.map(house => house.dataValues.id);
+    const houseIds = houses.map((house) => house.dataValues.id);
     const bookingData = await Booking.findAll({
       where: {
         reserved: true,
         houseId: {
-          [Op.in]: houseIds
+          [Op.in]: houseIds,
         },
         endDate: {
-          [Op.gte]: new Date()
-        }
+          [Op.gte]: new Date(),
+        },
       },
-      order: [["startDate", "ASC"]]
+      order: [["startDate", "ASC"]],
     });
     const bookings = await Promise.all(
-      bookingData.map(async book => {
+      bookingData.map(async (book) => {
         return {
           booking: book.dataValues,
           house: houses.filter(
-            house => house.dataValues.id === book.dataValues.houseId
-          )[0].dataValues
+            (house) => house.dataValues.id === book.dataValues.houseId
+          )[0].dataValues,
         };
       })
     );
-    res
-      .send(
-        JSON.stringify({
-          bookings,
-          houses
-        })
-      )
-      .sendStatus(200);
+    res.send(
+      JSON.stringify({
+        bookings,
+        houses,
+      })
+    );
   } catch (error) {
     console.log(error);
   }
 });
 
-router.post("/new", requireAuth, async (req, res) => {
+router.post("/host/new", async (req, res) => {
   try {
     const houseData = req.body;
     const user = req.headers.user;
     const userInfo = await User.findOne({
       where: {
-        email: user
-      }
+        email: user,
+      },
     });
     houseData.host = userInfo.id;
+    houseData.description = sanitizeHtml(houseData.description, {
+      allowedTags: ["b", "i", "em", "strong", "p", "br"],
+    });
     const newHouse = await House.create(houseData);
     res.writeHead(200, {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     });
     res.end(JSON.stringify({ status: "success", message: "ok" }));
   } catch (error) {
@@ -281,37 +305,59 @@ router.post("/new", requireAuth, async (req, res) => {
   }
 });
 
-router.post("/host/edit", requireAuth, async (req, res, next) => {
+router.post("/host/edit", async (req, res, next) => {
   try {
     const houseData = req.body;
     const { user } = req.headers;
     const host = await User.findOne({
       where: {
-        email: user
-      }
+        email: user,
+      },
     });
 
     const house = await House.findByPk(houseData.id);
 
     if (host.id !== house.dataValues.host) {
       res.writeHead(403, {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       });
       res.end(
         JSON.stringify({
           status: "error",
-          message: "Unauthorized"
+          message: "Unauthorized",
         })
       );
 
       return;
     }
+    houseData.description = sanitizeHtml(houseData.description, {
+      allowedTags: ["b", "i", "em", "strong", "p", "br"],
+    });
     House.update(houseData, {
       where: {
-        id: houseData.id
-      }
+        id: houseData.id,
+      },
     });
     res.end(JSON.stringify({ status: "success", message: "ok" }));
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+router.post("/host/image", upload.single("file"), (req, res) => {
+  try {
+    console.log("req.files", req.files);
+    if (!req.files) {
+      res.status(500);
+      return next(err);
+    }
+    const fileName =
+      randomstring.generate(7) + req.files.file.name.replace(/\s/g, "");
+    res.json({
+      fileUrl: "http://localhost:3000/images/" + fileName,
+    });
+
+    // res.end(JSON.stringify({ status: "success", path: "/img/" + fileName }));
   } catch (error) {
     console.log(error);
   }
