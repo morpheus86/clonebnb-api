@@ -5,7 +5,6 @@ const bodyParser = require("body-parser");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const routes = require("./controllers/routes");
-const fileupload = require("express-fileupload");
 const Booking = require("./models/bookings.model");
 const User = require("./models/user.model");
 const Review = require("./models/reviews.model");
@@ -25,12 +24,11 @@ const app = express();
 //     }
 //   },
 // };
-
-app.use(fileupload());
 app.use(morgan("combined"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.use("/public", express.static("public"));
 app.use("/api", routes);
 // custom error handling
 // app.use((err, req, res, next) => {

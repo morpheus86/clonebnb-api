@@ -8,13 +8,13 @@ const { requireAuth } = require("../functions/login");
 const Op = require("sequelize").Op;
 const sanitizeHtml = require("sanitize-html");
 const randomstring = require("randomstring");
-var multer = require("multer");
-var storage = multer.diskStorage({
+const multer = require("multer");
+
+const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./public/images");
+    cb(null, __dirname + "/img");
   },
   filename: (req, file, cb) => {
-    console.log(file);
     var filetype = "";
     if (file.mimetype === "image/gif") {
       filetype = "gif";
@@ -346,18 +346,18 @@ router.post("/host/edit", async (req, res, next) => {
 
 router.post("/host/image", upload.single("file"), (req, res) => {
   try {
-    console.log("req.files", req.files);
-    if (!req.files) {
+    console.log("__dirname", __dirname);
+    console.log("req.file", req.file);
+    if (!req.file) {
       res.status(500);
       return next(err);
     }
     const fileName =
-      randomstring.generate(7) + req.files.file.name.replace(/\s/g, "");
+      randomstring.generate(7) + req.file.originalname.replace(/\s/g, "");
+    const url = req.protocol + "://" + "localhost:3000";
     res.json({
-      fileUrl: "http://localhost:3000/images/" + fileName,
+      fileUrl: url + "/images/" + fileName,
     });
-
-    // res.end(JSON.stringify({ status: "success", path: "/img/" + fileName }));
   } catch (error) {
     console.log(error);
   }
