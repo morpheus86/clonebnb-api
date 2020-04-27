@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const fs = require("fs");
 const House = require("../../models/house.model");
 const Review = require("../../models/reviews.model");
 const User = require("../../models/user.model");
@@ -12,7 +13,7 @@ const multer = require("multer");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __dirname + "/img");
+    cb(null, "./public/");
   },
   filename: (req, file, cb) => {
     var filetype = "";
@@ -344,19 +345,18 @@ router.post("/host/edit", async (req, res, next) => {
   }
 });
 
-router.post("/host/image", upload.single("file"), (req, res) => {
+router.post("/upload", upload.single("file"), (req, res, next) => {
   try {
-    console.log("__dirname", __dirname);
-    console.log("req.file", req.file);
     if (!req.file) {
       res.status(500);
       return next(err);
     }
-    const fileName =
-      randomstring.generate(7) + req.file.originalname.replace(/\s/g, "");
-    const url = req.protocol + "://" + "localhost:3000";
+
+    const url = req.protocol + "://" + "localhost:4000";
+    const path = req.file.path.slice(6);
+    const fileUrl = url + "/upload" + path;
     res.json({
-      fileUrl: url + "/images/" + fileName,
+      fileUrl: fileUrl,
     });
   } catch (error) {
     console.log(error);

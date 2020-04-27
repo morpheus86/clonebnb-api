@@ -4,7 +4,7 @@ const db = require("./database");
 
 const House = db.define("house", {
   host: { type: Sequelize.INTEGER, allowNull: false },
-  picture: { type: Sequelize.TEXT, allowNull: false },
+  picture: { type: Sequelize.STRING, allowNull: false },
   type: { type: Sequelize.STRING, allowNull: false },
   town: { type: Sequelize.STRING, allowNull: false },
   title: { type: Sequelize.STRING, allowNull: false },
@@ -12,7 +12,7 @@ const House = db.define("house", {
   superhost: {
     type: Sequelize.BOOLEAN,
     allowNull: true,
-    defaultValue: false
+    defaultValue: false,
   },
   description: { type: Sequelize.TEXT },
   guests: { type: Sequelize.INTEGER, allowNull: false },
@@ -23,7 +23,7 @@ const House = db.define("house", {
   kitchen: { type: Sequelize.BOOLEAN, allowNull: false },
   heating: { type: Sequelize.BOOLEAN, allowNull: false },
   freeParking: { type: Sequelize.BOOLEAN, allowNull: false },
-  entirePlace: { type: Sequelize.BOOLEAN, allowNull: false }
+  entirePlace: { type: Sequelize.BOOLEAN, allowNull: false },
 });
 
 module.exports = House;
