@@ -1,3 +1,4 @@
+"use strict";
 const router = require("express").Router();
 const fs = require("fs");
 const House = require("../../models/house.model");
@@ -8,7 +9,6 @@ const { getDatesInBetween } = require("../functions/booking");
 const { requireAuth } = require("../functions/login");
 const Op = require("sequelize").Op;
 const sanitizeHtml = require("sanitize-html");
-const randomstring = require("randomstring");
 const multer = require("multer");
 
 const storage = multer.diskStorage({
@@ -93,7 +93,7 @@ router.get("/:id", (req, res, next) => {
   }
 });
 
-router.post("/booked", async (req, res, next) => {
+router.post("/booked", async (req, res) => {
   try {
     const houseId = req.body.houseId;
     const result = await Booking.findAll({

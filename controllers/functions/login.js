@@ -5,7 +5,7 @@ const bcrypt = require("bcryptjs");
 //setUp redis Client
 const redisClient = redis.createClient();
 
-const handleSignin = async (db, user, req) => {
+const handleSignin = async (db, user, req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -14,33 +14,36 @@ const handleSignin = async (db, user, req) => {
     //select email and password from login
     const userLog = await db.findOne({
       where: {
-        email
-      }
+        email,
+      },
     });
+    if (!userLog) {
+      return Promise.reject("User does not exist");
+    }
     // Compare password entered and password stored in db
-    const isPassword = async password => {
+    const isPassword = async (password) => {
       return await bcrypt.compare(password, userLog.dataValues.password);
     };
 
-    const isPasswordValid = isPassword(password);
+    const isPasswordValid = await isPassword(password);
 
     if (isPasswordValid) {
       //grab the user Info and return it
       const userInfo = await user.findOne({
         where: {
-          email
-        }
+          email,
+        },
       });
       return userInfo;
     } else {
-      Promise.reject("wrong credential");
+      return Promise.reject("wrong credential");
     }
   } catch (error) {
     console.log(error);
   }
 };
 
-const signinToken = username => {
+const signinToken = (username) => {
   const jwtPayload = { username };
   return jwt.sign(jwtPayload, "JWT_SECRET_KEY", { expiresIn: "2 days" });
 };
@@ -57,7 +60,7 @@ const createSession = async (user, res) => {
       success: true,
       userId: id,
       token,
-      user
+      user,
     };
   } else {
     return Promise.reject("Token Problem");
@@ -101,5 +104,5 @@ const requireAuth = (req, res, next) => {
 };
 module.exports = {
   signinAuthentication,
-  requireAuth
+  requireAuth,
 };

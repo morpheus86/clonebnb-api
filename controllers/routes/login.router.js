@@ -5,9 +5,9 @@ const { signinAuthentication } = require("../functions/login");
 const UserLogin = require("../../models/login.model");
 const User = require("../../models/user.model");
 
-router.post("/", (req, res, next) => {
+router.post("/", async (req, res, next) => {
   try {
-    signinAuthentication(UserLogin, User, req, res);
+    await signinAuthentication(UserLogin, User, req, res);
   } catch (error) {
     next(error);
   }
