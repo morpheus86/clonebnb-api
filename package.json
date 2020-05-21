@@ -4,10 +4,7 @@
   "description": "API File for our clonebnb",
   "main": "index.js",
   "scripts": {
-    "start": "npm run client & nodemon index.js",
-    "client": "npm run build-client && PORT=4000 nodemon index.js",
-    "build-client": "cd ../airbnbClone && npm run dev && cd ..",
-    "seed": "node seed/seed.js"
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
