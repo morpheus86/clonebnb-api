@@ -47,11 +47,9 @@ const checkIfBooked = async (id, start, end) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    const houseFound = await House.findAndCountAll();
+    // const houseFound = await House.findAll();
 
-    const result = houseFound.rows.map((h) => h.dataValues);
-
-    res.send(result);
+    res.send("voila");
   } catch (error) {
     next(error);
   }
