@@ -17,7 +17,6 @@ const handleSignin = async (db, user, req, res) => {
         email,
       },
     });
-    console.log("userLog", userLog.dataValues.password);
     if (!userLog) {
       return Promise.reject("User does not exist");
     }
@@ -26,9 +25,7 @@ const handleSignin = async (db, user, req, res) => {
       return await bcrypt.compare(password, userLog.dataValues.password);
     };
 
-    const isPasswordValid = isPassword(password);
-
-    console.log("isPasswordValid", isPasswordValid);
+    const isPasswordValid = await isPassword(password);
 
     if (isPasswordValid) {
       //grab the user Info and return it
