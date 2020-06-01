@@ -7,6 +7,7 @@ process.env.DATABASE_URL
   ? (sequelize = new Sequelize(database))
   : (sequelize = new Sequelize(database, "postgres", "", {
       dialect: postgres,
+      logging: false,
     }));
 
 module.exports = sequelize;
