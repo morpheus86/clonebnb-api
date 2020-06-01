@@ -49,7 +49,7 @@ router.get("/", async (req, res, next) => {
   try {
     // const houseFound = await House.findAll();
 
-    res.send("voila");
+    res.send("voila we are here");
   } catch (error) {
     next(error);
   }
