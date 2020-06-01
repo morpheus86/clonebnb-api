@@ -1,7 +1,7 @@
 "use strict";
 const Sequelize = require("sequelize");
 
-console.log("process.env.DATA_BASE_URL", process.env.DATA_BASE_URL);
+console.log("process.env.DATA_BASE_URL", process.env);
 module.exports = new Sequelize({
   dialect: "postgres",
   logging: false,
