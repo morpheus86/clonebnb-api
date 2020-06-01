@@ -2,27 +2,27 @@
 const Sequelize = require("sequelize");
 const db = require("./database");
 
-const Booking = db.define("booking", {
+const Booking = db.define("bookings", {
   houseId: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   userId: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   startDate: {
     type: Sequelize.DATEONLY,
-    allowNull: false
+    allowNull: false,
   },
   endDate: {
     type: Sequelize.DATEONLY,
-    allowNull: false
+    allowNull: false,
   },
   reserved: {
     type: Sequelize.BOOLEAN,
-    defaultValue: false
-  }
+    defaultValue: false,
+  },
 });
 
 module.exports = Booking;

@@ -4,25 +4,25 @@ const db = require("./database");
 const bcrypt = require("bcryptjs");
 
 const UserLogin = db.define(
-  "login",
+  "logins",
   {
     email: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     password: {
       type: Sequelize.STRING,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     hooks: {
-      beforeCreate: async user => {
+      beforeCreate: async (user) => {
         const saltRound = 10;
         const salt = await bcrypt.genSalt(saltRound);
         user.password = await bcrypt.hash(user.password, salt);
-      }
-    }
+      },
+    },
   }
 );
 

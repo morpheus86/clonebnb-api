@@ -2,7 +2,7 @@
 const Sequelize = require("sequelize");
 const db = require("./database");
 
-const House = db.define("house", {
+const House = db.define("houses", {
   host: { type: Sequelize.INTEGER, allowNull: false },
   picture: { type: Sequelize.STRING, allowNull: false },
   type: { type: Sequelize.STRING, allowNull: false },

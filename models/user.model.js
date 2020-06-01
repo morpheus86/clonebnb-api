@@ -2,27 +2,27 @@ const Sequelize = require("sequelize");
 const db = require("./database");
 
 const User = db.define(
-  "user",
+  "users",
   {
     name: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     lastName: {
       type: Sequelize.STRING,
-      allowNull: false
+      allowNull: false,
     },
     email: {
       type: Sequelize.STRING,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     hooks: {
-      beforeValidate: user => {
+      beforeValidate: (user) => {
         user.name = user.name[0].toUpperCase() + user.name.slice(1);
-      }
-    }
+      },
+    },
   }
 );
 
