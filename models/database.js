@@ -1,10 +1,12 @@
 "use strict";
-const config = require("../controllers/config/config.json");
 const Sequelize = require("sequelize");
+const user = "hamadoudiallo";
+const database = "bnb-clone";
+const password = "";
+const host = "localhost";
 
-module.exports = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config
-);
+module.exports = new Sequelize(database, user, password, {
+  host,
+  dialect: "postgres",
+  logging: false,
+});

@@ -11,7 +11,7 @@ const Review = require("./models/reviews.model");
 const UserLogin = require("./models/login.model");
 const House = require("./models/house.model");
 
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const app = express();
 
 app.use(morgan("combined"));
@@ -20,6 +20,13 @@ app.use("/upload", express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.get("/", (req, res, next) => {
+  try {
+    res.send("voila");
+  } catch (error) {
+    next(error);
+  }
+});
 app.use("/api", routes);
 
 // custom error handling

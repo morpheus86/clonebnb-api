@@ -4,7 +4,9 @@
   "description": "API File for our clonebnb",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "seed": "node seed/seed.js"
+
   },
   "keywords": [],
   "author": "",
@@ -25,6 +27,7 @@
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.9.1",
     "multer": "^1.4.2",
+    "nodemon": "^2.0.4",
     "path": "^0.12.7",
     "pg": "^7.18.2",
     "pg-hstore": "^2.3.3",
