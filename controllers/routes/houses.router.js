@@ -352,6 +352,7 @@ router.post("/upload", upload.single("file"), (req, res, next) => {
 
     const url = req.protocol + "://" + "localhost:4000";
     const path = req.file.path.slice(6);
+    console.log("path", path);
     const fileUrl = url + "/upload" + path;
     res.json({
       fileUrl: fileUrl,
