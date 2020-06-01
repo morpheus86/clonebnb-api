@@ -350,7 +350,7 @@ router.post("/upload", upload.single("file"), (req, res, next) => {
       return next(err);
     }
 
-    const url = req.protocol + "://" + "localhost:4000";
+    const url = "https://polar-refuge-69571.herokuapp.com";
     const path = req.file.path.slice(6);
     console.log("path", path);
     const fileUrl = url + "/upload" + path;

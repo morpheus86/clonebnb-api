@@ -17,6 +17,7 @@ const handleSignin = async (db, user, req, res) => {
         email,
       },
     });
+    console.log("userLog", userLog);
     if (!userLog) {
       return Promise.reject("User does not exist");
     }
@@ -26,6 +27,8 @@ const handleSignin = async (db, user, req, res) => {
     };
 
     const isPasswordValid = await isPassword(password);
+
+    console.log("isPasswordValid", isPasswordValid);
 
     if (isPasswordValid) {
       //grab the user Info and return it
