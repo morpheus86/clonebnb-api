@@ -26,7 +26,7 @@ const handleSignin = async (db, user, req, res) => {
       return await bcrypt.compare(password, userLog.dataValues.password);
     };
 
-    const isPasswordValid = await isPassword(password);
+    const isPasswordValid = isPassword(password);
     console.log("isPasswordValid", isPasswordValid);
 
     if (isPasswordValid) {
