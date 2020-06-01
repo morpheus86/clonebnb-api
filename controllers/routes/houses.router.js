@@ -47,9 +47,9 @@ const checkIfBooked = async (id, start, end) => {
 
 router.get("/", async (req, res, next) => {
   try {
-    // const houseFound = await House.findAll();
+    const houseFound = await House.findAll();
 
-    res.send("voila we are here");
+    res.send(houseFound);
   } catch (error) {
     next(error);
   }
