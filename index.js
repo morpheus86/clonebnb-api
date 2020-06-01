@@ -44,7 +44,7 @@ app.use((err, req, res, next) => {
 
   res.status(err.status || 500).end();
 });
-
+console.log("process.env.REDIS_URL", process.env.REDIS_URL);
 User.sync({ alter: true });
 House.sync({ alter: true });
 Review.sync({ alter: true });
