@@ -1,7 +1,7 @@
 "use strict";
 const Sequelize = require("sequelize");
 const db = require("./database");
-
+console.log("db", db);
 const House = db.define("houses", {
   host: { type: Sequelize.INTEGER, allowNull: false },
   picture: { type: Sequelize.STRING, allowNull: false },
