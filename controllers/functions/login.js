@@ -21,11 +21,13 @@ const handleSignin = async (db, user, req, res) => {
       return Promise.reject("User does not exist");
     }
     // Compare password entered and password stored in db
+    console.log("userLog.dataValues.password", userLog.dataValues.password);
     const isPassword = async (password) => {
       return await bcrypt.compare(password, userLog.dataValues.password);
     };
 
     const isPasswordValid = await isPassword(password);
+    console.log("isPasswordValid", isPasswordValid);
 
     if (isPasswordValid) {
       //grab the user Info and return it
