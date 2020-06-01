@@ -1,12 +1,12 @@
 "use strict";
 const Sequelize = require("sequelize");
+let database = process.env.DATABASE_URL;
+let sequelize = "";
 
-console.log("process.env.DATA_BASE_URL", process.env);
-module.exports = new Sequelize({
-  dialect: "postgres",
-  logging: false,
-  connection: {
-    connectonString: process.env.DATABASE_URL,
-    ssl: true,
-  },
-});
+process.env.DATABASE_URL
+  ? (sequelize = new Sequelize(database))
+  : (sequelize = new Sequelize(database, "postgres", "", {
+      dialect: postgres,
+    }));
+
+module.exports = sequelize;
