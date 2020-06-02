@@ -174,7 +174,7 @@ router.post("/reserve", requireAuth, async (req, res, next) => {
       endDate,
       reserved,
     });
-    res.sendStatus(200).end(
+    res.end(
       JSON.stringify({
         status: "success",
         message: "ok",
@@ -223,12 +223,14 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
       })
     );
 
-    res.sendStatus(200).end(
-      JSON.stringify({
-        bookings,
-        houses,
-      })
-    );
+    res
+      .end(
+        JSON.stringify({
+          bookings,
+          houses,
+        })
+      )
+      .sendStatus(200);
   } catch (err) {
     console.log(err);
   }
@@ -270,7 +272,7 @@ router.get("/host/list/:userId", requireAuth, async (req, res, next) => {
         };
       })
     );
-    res.send(
+    res.end(
       JSON.stringify({
         bookings,
         houses,
