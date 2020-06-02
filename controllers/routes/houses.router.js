@@ -354,6 +354,7 @@ router.post("/upload", upload.single("file"), (req, res, next) => {
     const path = req.file.path.slice(6);
     console.log("path", path);
     const fileUrl = url + "/upload" + path;
+    console.log("fileUrl", fileUrl);
     res.json({
       fileUrl: fileUrl,
     });

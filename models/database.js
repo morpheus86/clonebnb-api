@@ -6,7 +6,7 @@ let sequelize = "";
 process.env.DATABASE_URL
   ? (sequelize = new Sequelize(database))
   : (sequelize = new Sequelize(database, "postgres", "", {
-      dialect: postgres,
+      dialect: "postgres",
       logging: false,
     }));
 
