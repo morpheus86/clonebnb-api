@@ -2,7 +2,6 @@
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const routes = require("./controllers/routes");
 const Booking = require("./models/bookings.model");
@@ -20,13 +19,6 @@ app.use("/upload", express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
-app.get("/", (req, res, next) => {
-  try {
-    res.send("voila");
-  } catch (error) {
-    next(error);
-  }
-});
 app.use("/api", routes);
 
 // custom error handling
@@ -44,7 +36,7 @@ app.use((err, req, res, next) => {
 
   res.status(err.status || 500).end();
 });
-console.log("process.env.REDIS_URL", process.env.REDIS_URL);
+
 User.sync({ alter: true });
 House.sync({ alter: true });
 Review.sync({ alter: true });

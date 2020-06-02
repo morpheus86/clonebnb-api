@@ -187,7 +187,6 @@ router.post("/reserve", requireAuth, async (req, res, next) => {
 
 router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
   try {
-    console.log("req.params", req.params);
     const { userId } = req.params;
     const user = await User.findOne({
       where: {
@@ -212,7 +211,7 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
       },
       order: [["startDate", "ASC"]],
     });
-    console.log("bookingData", bookingData);
+
     const bookings = await Promise.all(
       bookingData.map(async (book) => {
         return {
@@ -223,15 +222,13 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
         };
       })
     );
-    console.log("bookings", bookings);
-    res
-      .send(
-        JSON.stringify({
-          bookings,
-          houses,
-        })
-      )
-      .sendStatus(200);
+
+    res.sendStatus(200).end(
+      JSON.stringify({
+        bookings,
+        houses,
+      })
+    );
   } catch (err) {
     console.log(err);
   }
@@ -355,9 +352,9 @@ router.post("/upload", upload.single("file"), (req, res, next) => {
 
     const url = "https://polar-refuge-69571.herokuapp.com";
     const path = req.file.path.slice(6);
-    console.log("path", path);
+
     const fileUrl = url + "/upload" + path;
-    console.log("fileUrl", fileUrl);
+
     res.json({
       fileUrl: fileUrl,
     });
