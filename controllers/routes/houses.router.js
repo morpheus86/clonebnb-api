@@ -187,6 +187,7 @@ router.post("/reserve", requireAuth, async (req, res, next) => {
 
 router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
   try {
+    console.log("req.params", req.params);
     const { userId } = req.params;
     const user = await User.findOne({
       where: {
@@ -211,6 +212,7 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
       },
       order: [["startDate", "ASC"]],
     });
+    console.log("bookingData", bookingData);
     const bookings = await Promise.all(
       bookingData.map(async (book) => {
         return {
@@ -221,6 +223,7 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
         };
       })
     );
+    console.log("bookings", bookings);
     res
       .send(
         JSON.stringify({
