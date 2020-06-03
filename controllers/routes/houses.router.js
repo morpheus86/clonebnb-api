@@ -176,7 +176,6 @@ router.post("/reserve", requireAuth, async (req, res, next) => {
       reserved,
     });
 
-    console.log("date ------", date);
     res.end(
       JSON.stringify({
         status: "success",
@@ -201,7 +200,6 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
         host: user.id,
       },
     });
-    const houseIds = houses.map((house) => house.dataValues.id);
 
     const bookingData = await Booking.findAll({
       where: {
@@ -212,8 +210,6 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
       },
       order: [["startDate", "ASC"]],
     });
-    // problem in bookings and how the data comes back Seems like data is not added to booking check algo
-    console.log("bookingData in bookings/list", bookingData);
 
     const bookings = await Promise.all(
       bookingData.map(async (book) => {
