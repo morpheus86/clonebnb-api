@@ -211,7 +211,7 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
       },
       order: [["startDate", "ASC"]],
     });
-
+    // problem in bookings and how the data comes back Seems like data is not added to booking check algo
     const bookings = await Promise.all(
       bookingData.map(async (book) => {
         return {
