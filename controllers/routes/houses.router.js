@@ -219,7 +219,7 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
       bookingData.map(async (book) => {
         return {
           booking: book.dataValues,
-          house,
+          houses,
         };
       })
     );
