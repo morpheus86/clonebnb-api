@@ -176,6 +176,7 @@ router.post("/reserve", requireAuth, async (req, res, next) => {
       reserved,
     });
 
+    console.log("date ------", date);
     res.end(
       JSON.stringify({
         status: "success",
@@ -205,7 +206,6 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
     const bookingData = await Booking.findAll({
       where: {
         reserved: true,
-        userId: userId,
         endDate: {
           [Op.gte]: new Date(),
         },
@@ -217,13 +217,13 @@ router.get("/bookings/list/:userId", requireAuth, async (req, res, next) => {
 
     const bookings = await Promise.all(
       bookingData.map(async (book) => {
-        return {
-          booking: book.dataValues,
-          houses,
-        };
+        const data = {};
+        data.booking = book.dataValues;
+        data.house = (await House.findByPk(data.booking.houseId)).dataValues;
+        return data;
       })
     );
-    console.log("bookings", bookings);
+
     res
       .end(
         JSON.stringify({
